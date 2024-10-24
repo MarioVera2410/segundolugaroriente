@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anunciar Ganador</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url('dinero.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 40px;
+            cursor: pointer;
+            background-color: #9c9c9c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .winner-box {
+            opacity: 0;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: gray;
+            border-radius: 10px;
+            font-size: 50px;
+            color: white;
+            transition: opacity 4s ease;
+
+        }
+        .winner-box.show {
+            opacity: 1;
+        }
+        #countdown {
+            display: none;
+            color: black;
+            font-size: 400px;
+            font-weight: bold;
+            position: absolute;
+            top: 10vh;
+            left: 18vw;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ff0;
+            opacity: 0.8;
+            animation: fall 15s infinite ease-in-out;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(100vh); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <button id="announceBtn">Anunciar Ganador</button>
+        <div id="countdown">10</div>
+        <div id="winnerBox" class="winner-box">
+            ¡El 2do ganador es: <strong>Mario Vera con 1999 pelotas</strong>
+        </div>
+    </div>
+
+    <script>
+        let confettiCount = 1000; // Cantidad de confetti
+        const announceBtn = document.getElementById('announceBtn');
+        const countdownEl = document.getElementById('countdown');
+        const winnerBox = document.getElementById('winnerBox');
+        
+        // Función para generar confetti
+        function createConfetti() {
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                document.body.appendChild(confetti);
+
+                // Eliminar confetti después de la animación
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Inicia el contador
+        function startCountdown() {
+            let timeLeft = 10;
+            countdownEl.style.display = 'block';
+
+            const countdownInterval = setInterval(() => {
+                countdownEl.textContent = timeLeft;
+                timeLeft--;
+
+                if (timeLeft < 0) {
+                    clearInterval(countdownInterval);
+                    countdownEl.style.display = 'none';
+                    winnerBox.classList.add('show'); // Aparece lentamente
+                    createConfetti(); // Muestra el confetti
+                }
+            }, 1000);
+        }
+
+        announceBtn.addEventListener('click', function() {
+            this.style.display = 'none'; // Oculta el botón
+            startCountdown(); // Inicia el contador
+        });
+    </script>
+
+</body>
+</html>
